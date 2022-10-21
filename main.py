@@ -10,8 +10,8 @@ system('cls')
 # The print statements are for debugging purposes
 
 
-# API needed for getting date of exchangerate
-API_KEY = '3e05c0498d440842ab943450'
+# API needed for getting date of exchange rate
+API_KEY = '' # API key goes here, needed for the code to work.
 LOCAL_REGION_CURRENCY = 'JMD'
 
 
