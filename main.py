@@ -119,8 +119,7 @@ def exchange():
             from_currency_value = inputed_text_list[index-2]
             for symbol in ('$', '£', '€', '¥', '₩'):
                 if symbol in from_currency_value:
-                    from_currency_value = float(
-                        from_currency_value[from_currency_value.find(symbol)+1:])
+                    from_currency_value = float(from_currency_value[from_currency_value.find(symbol)+1:])
                     break
             else:
                 from_currency_value = float(inputed_text_list[index-2])
