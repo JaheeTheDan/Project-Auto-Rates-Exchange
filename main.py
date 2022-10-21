@@ -12,7 +12,7 @@ system('cls')
 
 # API needed for getting date of exchangerate
 API_KEY = '3e05c0498d440842ab943450'
-LOCAL_REGION_CURRENY = 'JMD'
+LOCAL_REGION_CURRENCY = 'JMD'
 
 
 def output_error(error_text: str = ''):
@@ -22,7 +22,7 @@ def output_error(error_text: str = ''):
     kb.write('!error '+error_text)
 
 
-def get_exchange_rate_data(region_curreny: str) -> dict:
+def get_exchange_rate_data(region_currency: str) -> dict:
     '''Get the exchange rate data from the given region from the API'''
     tries = 0
     # If there an error to get the data, it tries again. And at the 3rd try,
@@ -30,14 +30,14 @@ def get_exchange_rate_data(region_curreny: str) -> dict:
     while tries < 3:
         try:
             response = get(
-                f'https://v6.exchangerate-api.com/v6/{API_KEY}/latest/{region_curreny}')
+                f'https://v6.exchangerate-api.com/v6/{API_KEY}/latest/{region_currency}')
             return response.json().get('conversion_rates')
         except (exceptions.ConnectionError, exceptions.HTTPError):
             tries += 1
 
     try:
         response = get(
-            f'https://v6.exchangerate-api.com/v6/{API_KEY}/latest/{region_curreny}')
+            f'https://v6.exchangerate-api.com/v6/{API_KEY}/latest/{region_currency}')
         return response.json().get('conversion_rates')
     except exceptions.HTTPError:
         output_error('Can\'t get exchange rates from API.')
@@ -47,61 +47,61 @@ def get_exchange_rate_data(region_curreny: str) -> dict:
         output_error('There was an error.')
 
 
-def from_curreny_to(to_curreny_name: str, from_curreny_value: float, from_curreny_name: str) -> float | None:
-    '''Exchange from one curreny to another requested by the user and return the result'''
-    exchange_rate_data = get_exchange_rate_data(from_curreny_name)
+def from_currency_to(to_currency_name: str, from_currency_value: float, from_currency_name: str) -> float | None:
+    '''Exchange from one currency to another requested by the user and return the result'''
+    exchange_rate_data = get_exchange_rate_data(from_currency_name)
 
     try:
-        print(f'From {from_curreny_name}',
-              exchange_rate_data[from_curreny_name])
-        print(f'To {to_curreny_name}', exchange_rate_data[to_curreny_name])
-        result = round(from_curreny_value *
-                       exchange_rate_data[to_curreny_name], 2)
+        print(f'From {from_currency_name}',
+              exchange_rate_data[from_currency_name])
+        print(f'To {to_currency_name}', exchange_rate_data[to_currency_name])
+        result = round(from_currency_value *
+                       exchange_rate_data[to_currency_name], 2)
     except KeyError:
-        output_error('Invalid curreny code, Try again.')
+        output_error('Invalid currency code, Try again.')
     else:
         print(result)
         return result
 
 
-def to_jmd_from(curreny_value: float, curreny_name: str) -> float | None:
-    '''Exchange from requested curreny to JMD and return the result'''
+def to_jmd_from(currency_value: float, currency_name: str) -> float | None:
+    '''Exchange from requested currency to JMD and return the result'''
     try:
         print('To JMD', local_exchange_rate['JMD'])
-        print(f'From {curreny_name}', local_exchange_rate[curreny_name])
-        result = round(curreny_value/local_exchange_rate[curreny_name], 2)
+        print(f'From {currency_name}', local_exchange_rate[currency_name])
+        result = round(currency_value/local_exchange_rate[currency_name], 2)
     except KeyError:
-        output_error('Invalid curreny code, Try again.')
+        output_error('Invalid currency code, Try again.')
     else:
         print(result)
         return result
 
 
-def from_jmd_to(curreny_name: str, curreny_value: float) -> float | None:
-    '''Exchange from JMD to requested curreny and return the result'''
+def from_jmd_to(currency_name: str, currency_value: float) -> float | None:
+    '''Exchange from JMD to requested currency and return the result'''
     try:
         print('To JMD', local_exchange_rate['JMD'])
-        print(f'From {curreny_name}', local_exchange_rate[curreny_name])
-        print(round(curreny_value*local_exchange_rate[curreny_name]))
+        print(f'From {currency_name}', local_exchange_rate[currency_name])
+        print(round(currency_value*local_exchange_rate[currency_name]))
     except KeyError:
-        output_error('Invalid curreny code, Try again.')
+        output_error('Invalid currency code, Try again.')
     else:
-        return round(curreny_value*local_exchange_rate[curreny_name], 2)
+        return round(currency_value*local_exchange_rate[currency_name], 2)
 
 
 def exchange():
     '''Does all the necessary reading of text inputs reading and output the result to the user '''
 
-    def output_result(result: str, curreny_name: str):
+    def output_result(result: str, currency_name: str):
         '''Returns the result to the user as text (as keyboard presses)'''
         bs_count = 8
         kb.press_and_release(','.join(['backspace' for i in range(bs_count)]))
-        kb.write(result+' '+curreny_name)
+        kb.write(result+' '+currency_name)
 
     global local_exchange_rate
     # Check if local exchange rate is available and if not a requested is made to get them
     if local_exchange_rate is None:
-        local_exchange_rate = get_exchange_rate_data(LOCAL_REGION_CURRENY)
+        local_exchange_rate = get_exchange_rate_data(LOCAL_REGION_CURRENCY)
 
     # The keyboard recording is stop to get the inputed text and start to record
     inputed_text = ''.join(kb.get_typed_strings(kb.stop_recording()))
@@ -112,55 +112,55 @@ def exchange():
 
     print(re.findall(r'\w{3} to \w{3}', inputed_text))
 
-    # Check if there is from and to curreny code, and if there is one of a pair of them.
+    # Check if there is from and to currency code, and if there is one of a pair of them.
     if 0 < len(re.findall(r'\w{3} to \w{3}', inputed_text)) < 2:
         index = inputed_text_list.index('to')
 
         try:
-            # Check for if there any popular curreny in text and make adjustments for it
-            from_curreny_value = inputed_text_list[index-2]
+            # Check for if there any popular currency in text and make adjustments for it
+            from_currency_value = inputed_text_list[index-2]
             for symbol in ('$', '£', '€', '¥', '₩'):
-                if symbol in from_curreny_value:
-                    from_curreny_value = float(
-                        from_curreny_value[from_curreny_value.find(symbol)+1:])
+                if symbol in from_currency_value:
+                    from_currency_value = float(
+                        from_currency_value[from_currency_value.find(symbol)+1:])
                     break
             else:
-                from_curreny_value = float(inputed_text_list[index-2])
+                from_currency_value = float(inputed_text_list[index-2])
 
-            from_curreny_name = inputed_text_list[index-1].upper()
-            to_curreny_name = inputed_text_list[index+1].upper()
+            from_currency_name = inputed_text_list[index-1].upper()
+            to_currency_name = inputed_text_list[index+1].upper()
 
-            print(from_curreny_value, from_curreny_name, to_curreny_name)
+            print(from_currency_value, from_currency_name, to_currency_name)
 
         except ValueError:
             output_error('Please try again.')
 
         else:
-            # Check if local curreny exchange rate data is ask for
-            if to_curreny_name == LOCAL_REGION_CURRENY:
+            # Check if local currency exchange rate data is ask for
+            if to_currency_name == LOCAL_REGION_CURRENCY:
                 print(1)
-                result = to_jmd_from(from_curreny_value, from_curreny_name)
+                result = to_jmd_from(from_currency_value, from_currency_name)
 
-            elif from_curreny_name == LOCAL_REGION_CURRENY:
+            elif from_currency_name == LOCAL_REGION_CURRENCY:
                 print(1)
-                result = from_jmd_to(to_curreny_name, from_curreny_value)
+                result = from_jmd_to(to_currency_name, from_currency_value)
 
             # If not local exchange rate data is not ask for then,
             # a new request is made for required exchange rate
             else:
                 print(0)
-                result = from_curreny_to(
-                    to_curreny_name, from_curreny_value, from_curreny_name)
+                result = from_currency_to(
+                    to_currency_name, from_currency_value, from_currency_name)
 
             if result is not None:
-                output_result(str(result), to_curreny_name)
+                output_result(str(result), to_currency_name)
 
     else:
         output_error('More than one request was readed, try again.')
 
 
 # Create local exchange rate dictionary so that one request can be made at start up
-local_exchange_rate = get_exchange_rate_data(LOCAL_REGION_CURRENY)
+local_exchange_rate = get_exchange_rate_data(LOCAL_REGION_CURRENCY)
 
 kb.start_recording()
 
