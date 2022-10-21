@@ -52,11 +52,9 @@ def from_currency_to(to_currency_name: str, from_currency_value: float, from_cur
     exchange_rate_data = get_exchange_rate_data(from_currency_name)
 
     try:
-        print(f'From {from_currency_name}',
-              exchange_rate_data[from_currency_name])
+        print(f'From {from_currency_name}',exchange_rate_data[from_currency_name])
         print(f'To {to_currency_name}', exchange_rate_data[to_currency_name])
-        result = round(from_currency_value *
-                       exchange_rate_data[to_currency_name], 2)
+        result = round(from_currency_value * exchange_rate_data[to_currency_name], 2)
     except KeyError:
         output_error('Invalid currency code, Try again.')
     else:
