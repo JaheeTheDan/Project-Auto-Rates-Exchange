@@ -12,7 +12,7 @@ system('cls')
 
 # API needed for getting date of exchange rate
 API_KEY = '' # API key goes here, needed for the code to work.
-LOCAL_REGION_CURRENCY = 'JMD'
+LOCAL_REGION_CURRENCY = 'JMD' # Your local region goes here, JMD is used for example
 
 
 def output_error(error_text: str = ''):
