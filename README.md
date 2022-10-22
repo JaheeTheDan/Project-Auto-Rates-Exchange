@@ -16,6 +16,8 @@
  $100 USD to CAD !error Can't get connection to Internet.
  
  There is some things you should be aware of, at times error would not be shown and 'ISO 4217 Three Letter Currency Code for that currency' has to be follow get the    right currency exchange rate.
+ Only the major currency can detected, so it best to not one or you put a space between it and it currency value 
+ 
  The code is using a API from 'ExchangeRate-API' to the data, and you have to make account to an API key in order for the code to work.
  There is a free tier but with a limit on the data you can get.
  
