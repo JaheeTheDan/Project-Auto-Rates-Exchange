@@ -62,10 +62,10 @@ def from_currency_to(to_currency_name: str, from_currency_value: float, from_cur
         return result
 
 
-def to_jmd_from(currency_value: float, currency_name: str) -> float | None:
+def to_local_from(currency_value: float, currency_name: str) -> float | None:
     '''Exchange from requested currency to JMD and return the result'''
     try:
-        print('To JMD', local_exchange_rate['JMD'])
+        print(f'To {LOCAL_REGION_CURRENCY}', local_exchange_rate[LOCAL_REGION_CURRENCY])
         print(f'From {currency_name}', local_exchange_rate[currency_name])
         result = round(currency_value/local_exchange_rate[currency_name], 2)
     except KeyError:
@@ -75,10 +75,10 @@ def to_jmd_from(currency_value: float, currency_name: str) -> float | None:
         return result
 
 
-def from_jmd_to(currency_name: str, currency_value: float) -> float | None:
+def from_local_to(currency_name: str, currency_value: float) -> float | None:
     '''Exchange from JMD to requested currency and return the result'''
     try:
-        print('To JMD', local_exchange_rate['JMD'])
+        print(f'To {LOCAL_REGION_CURRENCY}', local_exchange_rate[LOCAL_REGION_CURRENCY])
         print(f'From {currency_name}', local_exchange_rate[currency_name])
         print(round(currency_value*local_exchange_rate[currency_name]))
     except KeyError:
@@ -136,11 +136,11 @@ def exchange():
             # Check if local currency exchange rate data is ask for
             if to_currency_name == LOCAL_REGION_CURRENCY:
                 print(1)
-                result = to_jmd_from(from_currency_value, from_currency_name)
+                result = to_local_from(from_currency_value, from_currency_name)
 
             elif from_currency_name == LOCAL_REGION_CURRENCY:
                 print(1)
-                result = from_jmd_to(to_currency_name, from_currency_value)
+                result = from_local_to(to_currency_name, from_currency_value)
 
             # If not local exchange rate data is not ask for then,
             # a new request is made for required exchange rate
